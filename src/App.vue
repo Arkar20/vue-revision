@@ -15,9 +15,10 @@
     <div v-if="loading">Loading...</div>
 
     <ul>
-      <li v-for="post in allposts.data" :key="post.id" >
+      <li v-for="post in allposts.data" :key="post.id" :style="style(post)">
         {{post.text}}
         <button style="color:red;" @click="remove(post.id)">remove</button>
+        <button style="color:red;" @click="update(post.id)">update</button>
       </li>
     </ul>
 
@@ -38,16 +39,19 @@ export default {
     }
   },
   methods:{
-    removePost: (id)=>{
-      this.remove(id);
+    style: (post)=>{
+        return post.cancel && 'text-decoration: line-through;'
     },
     
-    ...mapActions(['fetchPost','remove',"filterPostsNum"])
+    
+    ...mapActions(['fetchPost','remove',"filterPostsNum",'update'])
   },
   created(){
     this.fetchPost()
   },
-  computed: mapGetters(['allposts','loading'])
+  computed: {
+    
+    ...mapGetters(['allposts','loading'])}
 }
 
 </script>

@@ -31,6 +31,7 @@ const actions = {
   remove ({ commit },id)  {
     commit('removePost',id)
   },
+
   filterPostsNum({ commit }, e) {
     
     commit("remoteAll");
@@ -43,6 +44,11 @@ const actions = {
       .then(result => commit('setPosts', result))
       .catch(err => console.log(err))
     .finally(()=>commit("toggelLoading"))
+  },
+
+  update: ({commit},id) => {
+      commit('update',id)
+    
   }
 
 
@@ -68,7 +74,19 @@ const mutations = {
     state.posts = {},
     state.loading = !state.loading
   },
-  toggelLoading: (state) => state.loading = !state.loading
+  
+  toggelLoading: (state) => state.loading = !state.loading,
+  update: (state,id) => {
+
+    const postDatatofind = state.posts.data.find(post=>post.id===id);
+    // console.log(postDatatofind);
+    const index = state.posts.data.findIndex(post => post.id === id);
+    
+    state.posts = {
+      ...state.posts,
+      data: [...state.posts.data.slice(0, index), {...postDatatofind,cancel:true},...state.posts.data.slice(index+1)]
+    }
+  }
 
 };
 
